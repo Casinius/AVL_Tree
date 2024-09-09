@@ -27,7 +27,7 @@ void print(avl_tree<T>& tree) {
 
 int main(int argc, char** argv) {
 	avl_tree<int> aa;
-	aa.make_avl_bst({1, 5, 4, 2, 3, 6});
+	aa.make_avl_bst({1, 5, 4, 2, 3, 6, 77, 56, 32, 22, 41});
 	printf("\n");
 	print(aa);
 	//for (auto x : aa) {

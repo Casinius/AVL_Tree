@@ -44,11 +44,11 @@ UseUTF8 = 1
 
 
 [Unit1]
-FileName = avl_tree.h
-CompileCpp = 0
-Folder = 头文件
-Compile = 0
-Link = 0
+FileName = main.cpp
+CompileCpp = 1
+Folder = 源文件
+Compile = 1
+Link = 1
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
@@ -77,11 +77,11 @@ SyncProduct = 1
 
 
 [Unit2]
-FileName = main.cpp
-CompileCpp = 1
-Folder = 源文件
-Compile = 1
-Link = 1
+FileName = avl_tree.h
+CompileCpp = 0
+Folder = 头文件
+Compile = 0
+Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 

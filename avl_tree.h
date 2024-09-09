@@ -56,6 +56,7 @@ struct avl_node {
 		if (this->right != nullptr && this->left != nullptr) {
 			return child_code::all;
 		}
+		throw child_code::none;
 	}
 
 	bool is_fathers_left() {
@@ -84,7 +85,7 @@ int calc_factor(avl_node<T>* root) {
 		}
 	}
 
-	return left_deep - right_deep;
+	return left_deep + right_deep;
 }
 #include<functional>
 template<avl_request_type T>
@@ -141,7 +142,7 @@ struct avl_tree : public std::vector<avl_node<T>> {
 					return new_root;
 				}
 			} else {
-				throw "RightPtr Nullptr";
+				static_assert("RightPtr Nullptr");
 			}
 			if (current_root->left != nullptr) {
 				if (!is_left) {//向右旋转
@@ -191,15 +192,17 @@ struct avl_tree : public std::vector<avl_node<T>> {
 
 				}
 			} else {
-				throw "LeftPtr Nullptr";
+				static_assert("LeftPtr Nullptr");
 			}
 
 		} else {
-			throw "Nullptr Expection!";
+			static_assert("Nullptr Expection!");
 		}
+		static_assert("Not Rotate!");
+		throw this;
 	}
 
-	void opt_iter_node(std::function<void(avl_node<T>* to_opt)> opt_func, avl_node<T>* current_root = nullptr) {
+	void op_iter_node(std::function<void(avl_node<T>* to_opt)> opt_func, avl_node<T>* current_root = nullptr) {
 		avl_node<T>* root = current_root;
 
 		while (root != nullptr) {
@@ -226,7 +229,7 @@ struct avl_tree : public std::vector<avl_node<T>> {
 		std::vector<avl_node<T>*> path;
 		avl_node<T>* opt_node = &(this->at(0));
 		int final_code = child_code::none;
-		std::cout << "Begin Find Node\n";
+		//std::cout << "Begin Find Node\n";
 		for (int i = 1; i < (int)this->size(); ++i) {
 			while (opt_node != nullptr) {
 				//std::cout << "FindNode\n";
@@ -264,20 +267,24 @@ struct avl_tree : public std::vector<avl_node<T>> {
 					break;
 			}
 		}
+
 		int a = 0;
 		for (int i = path.size() - 1; i >= 0; --i) {
 			if (path.at(i)->get_child_code() == child_code::none) {
 				continue;
 			} else {
 				a = calc_factor(path.at(i));
+				std::cout << a << "\n";
 				if (a == 2) {
-
+					//rotate(false, path.at(i));
 				}
 				if (a == -2) {
-//
+					//rotate(true, path.at(i));
 				}
 			}
 		}
+
+
 
 
 	}
