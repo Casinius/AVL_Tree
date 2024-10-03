@@ -102,11 +102,41 @@ struct avl_tree : public std::vector<avl_node<T>> {
 		unDefine = 6
 	};
   private:
+	rotate_situ fast_detect_right_branch(const int idx) {
+		int r_idx = this->at(idx).right;
+		int l_idx = this->at(idx).left;
+
+		if (this->at(idx).has_right()) {
+			if (this->at(r_idx).has_left()) {
+				return rotate_situ::LRiR;
+			}
+			if (this->at(r_idx).has_right()) {
+				return rotate_situ::RRiR;
+			}
+		}
+		if (this->at(idx).get_child_code() == child_code::c_none) {
+			return rotate_situ::Balanced;
+		}
+	}
+	rotate_situ fast_detect_left_branch(const int idx) {
+		int r_idx = this->at(idx).right;
+		int l_idx = this->at(idx).left;
+		if (this->at(idx).has_left()) {
+			if (this->at(l_idx).has_left()) {
+				return rotate_situ::LLiL;
+			}
+			if (this->at(l_idx).has_right()) {
+				return rotate_situ::LRiL;
+			}
+		}
+		if (this->at(idx).get_child_code() == child_code::c_none) {
+			return rotate_situ::Balanced;
+		}
+	}
 	std::vector<rotate_situ> fast_detect(const int idx) {
 		std::vector<rotate_situ> ret;
 		int r_idx = this->at(idx).right;
 		int l_idx = this->at(idx).left;
-		int full = 0, l = 0, r = 0;
 		if (this->at(idx).has_left()) {
 			if (this->at(l_idx).has_left()) {
 				ret.emplace_back(rotate_situ::LLiL);
@@ -158,53 +188,94 @@ struct avl_tree : public std::vector<avl_node<T>> {
 	constexpr int64_t no_neg(int64_t& a, int64_t& b) {
 		return (a - b > 0) ? (a - b) : (b - a);
 	}
-	void rotate_left(int idx) {
-		int father = this->at(idx).father;
-		int current = idx;
-		int left = this->at(current).left;
-		if (left == INVLD_DEFAULT) {
+	void rotate_left(int cur_idx) {
+		int father = this->at(cur_idx).father;
+		int current = cur_idx;
+		int new_root = this->at(current).left;
+		if (new_root == INVLD_DEFAULT) {
 			throw this;
 		} else {
 			if (this->at(current).is_fathers_left()) {
-				this->at(father).left = left;
+				this->at(father).left = new_root;
 			} else {
-				this->at(father).right = left;
+				this->at(father).right = new_root;
 			}
 
-			this->at(current).father = left;
-			if (this->at(left).right == INVLD_DEFAULT) {
-				this->at(left).right = current;
+			this->at(current).father = new_root;
+			if (this->at(new_root).left == INVLD_DEFAULT) {
+				this->at(new_root).left = current;
 			} else {
 				int std_idx = current;
-				int right = this->at(left).right;
-				this->at(left).right = current;
+				int new_root_left = this->at(new_root).left;
+				this->at(new_root).left = current;
 				while (1) {
-					if (this->at(right).value > this->at(std_idx).value) {
+					if (this->at(new_root_left).value > this->at(std_idx).value) {
 						if (this->at(std_idx).right == INVLD_DEFAULT) {
-							this->at(std_idx).right = right;
-							this->at(right).father = std_idx;
+							this->at(std_idx).right = new_root_left;
+							this->at(new_root_left).father = std_idx;
 							break;
 						}
 						std_idx = this->at(std_idx).right;
 					}
-					if (this->at(right).value < this->at(std_idx).value) {
+					if (this->at(new_root_left).value < this->at(std_idx).value) {
 						if (this->at(std_idx).left == INVLD_DEFAULT) {
-							this->at(std_idx).right = left;
-							this->at(right).father = std_idx;
+							this->at(std_idx).left = new_root_left;
+							this->at(new_root_left).father = std_idx;
 							break;
 						}
 						std_idx = this->at(std_idx).left;
 					}
-					if (this->at(right).value == this->at(std_idx).value) {
+					if (this->at(new_root_left).value == this->at(std_idx).value) {
 						throw this;
 					}
 				}
 			}
 		}
 	}
-	void rotate_right(int idx) {
-		int father = this->at(idx).father;
-		int current = idx;
+	void rotate_right(int cur_idx) {
+		int father = this->at(cur_idx).father;
+		int current = cur_idx;
+		int new_root = this->at(current).left;
+		if (new_root == INVLD_DEFAULT) {
+			throw this;
+		} else {
+			if (this->at(current).is_fathers_left()) {
+				this->at(father).left = new_root;
+			} else {
+				this->at(father).right = new_root;
+			}
+
+			this->at(current).father = new_root;
+			if (this->at(new_root).right == INVLD_DEFAULT) {
+				this->at(new_root).right = current;
+			} else {
+				int std_idx = current;
+				int new_root_right = this->at(new_root).right;
+				this->at(new_root).right = current;
+				while (1) {
+					if (this->at(new_root_right).value > this->at(std_idx).value) {
+						if (this->at(std_idx).right == INVLD_DEFAULT) {
+							this->at(std_idx).right = new_root_right;
+							this->at(new_root_right).father = std_idx;
+							break;
+						}
+						std_idx = this->at(std_idx).right;
+					}
+					if (this->at(new_root_right).value < this->at(std_idx).value) {
+						if (this->at(std_idx).left == INVLD_DEFAULT) {
+							this->at(std_idx).left = new_root_right;
+							this->at(new_root_right).father = std_idx;
+							break;
+						}
+						std_idx = this->at(std_idx).left;
+					}
+					if (this->at(new_root_right).value == this->at(std_idx).value) {
+						throw this;
+					}
+				}
+			}
+
+		}
 	}
 
   public:
@@ -260,49 +331,23 @@ struct avl_tree : public std::vector<avl_node<T>> {
 			}
 		}//节点关系
 		for (int64_t i = 0; i < (int64_t)this->size(); ++i) {
-			int factor = calc_factor(i);
-			std::cout << factor << "\n";
-			if (factor == 1) {
+			rotate_situ lres = fast_detect_left_branch(i), rres = fast_detect_right_branch(i);
+			if (lres == rotate_situ::LRiL) {
 
 			}
-			if (factor == -1) {
+			if (lres == rotate_situ::LRiL) {
 
 			}
-			if (factor >= 2) {
+			if (rres == rotate_situ::RRiR) {
 
 			}
-			if (factor <= -2) {
+			if (rres == rotate_situ::LRiR) {
 
 			}
+
 		}
 	}
 };
 
 
 
-/*
-int64_t l = 0, r = 0;
-for (int64_t x : path) {
-
-switch (this->at(x).get_child_code()) {
-case child_code::c_left:
-l++;
-break;
-case child_code::c_right:
-r++;
-break;
-case child_code::c_all:
-l++;
-r++;
-break;
-case child_code::c_none:
-
-break;
-default:
-//TODO
-break;
-}
-
-this->at(x).height = no_neg(l, r);
-}path.clear();
-*/
