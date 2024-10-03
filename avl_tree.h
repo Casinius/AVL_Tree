@@ -159,30 +159,36 @@ struct avl_tree : public std::vector<avl_node<T>> {
 		return std::move(ret);
 	}
   private:
-	int calc_factor(int idx) {
+	int calc_factor(const int idx) {
+		int std_idx = idx;
 		int l = 0, r = 0;
-		switch (this->at(idx).get_child_code()) {
-			case child_code::c_left:
-				l++;
-				calc_factor(this->at(idx).left);
-				break;
-			case child_code::c_right:
-				r++;
-				calc_factor(this->at(idx).right);
-				break;
-			case child_code::c_all:
-				l++;
-				r++;
-				calc_factor(this->at(idx).left);
-				calc_factor(this->at(idx).right);
-				break;
-			case child_code::c_none:
-				break;
-				break;
-			default:
-				//TODO
-				break;
+		if (std_idx != INVLD_DEFAULT) {
+			switch (this->at(std_idx).get_child_code()) {
+				case child_code::c_left:
+					l++;
+					//std_idx = this->at(std_idx).left;
+					l += calc_factor(this->at(idx).left);
+					r += calc_factor(this->at(idx).right);
+					break;
+				case child_code::c_right:
+					r++;
+					//std_idx = this->at(std_idx).right;
+					break;
+				case child_code::c_all:
+					l++;
+					r++;
+					l += calc_factor(this->at(idx).left);
+					r += calc_factor(this->at(idx).right);
+					break;
+				case child_code::c_none:
+
+					break;
+				default:
+					//TODO
+					break;
+			}
 		}
+
 		return l - r;
 	}
 	constexpr int64_t no_neg(int64_t& a, int64_t& b) {
@@ -331,19 +337,9 @@ struct avl_tree : public std::vector<avl_node<T>> {
 			}
 		}//节点关系
 		for (int64_t i = 0; i < (int64_t)this->size(); ++i) {
-			rotate_situ lres = fast_detect_left_branch(i), rres = fast_detect_right_branch(i);
-			if (lres == rotate_situ::LRiL) {
+			std::cout << calc_factor(i) << "\n";
 
-			}
-			if (lres == rotate_situ::LRiL) {
 
-			}
-			if (rres == rotate_situ::RRiR) {
-
-			}
-			if (rres == rotate_situ::LRiR) {
-
-			}
 
 		}
 	}
