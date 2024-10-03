@@ -2,26 +2,29 @@
 #include "avl_tree.h"
 template<avl_request_type T>
 void print(avl_tree<T>& tree) {
-	int l = 0, r = 0;
+
+	int idx = 0;
 	for (avl_node<T> x : tree) {
 		//std::cout << "     " << x.value << "\n";
-		if (x.left != nullptr && x.right == nullptr) {
-			for (int i = tree.size(); i > l; i--) {
-				std::cout << " ";
-			}
-			std::cout << x.left->value;
 
-			l++;
+		std::cout << x.self << "  |  x.value:" << x.value << "   |   ";
+		if (x.left != -1 && x.right == -1) {
+
+			std::cout << "left:" << tree.at(x.left).value;
+
 		}
-		if (x.right != nullptr && x.left == nullptr) {
-			std::cout << "                 ";
-			for (int i = 0; i < r; i++) {
-				std::cout << " ";
-			}
-			std::cout << x.right->value;
-			r++;
+		if (x.right != -1 && x.left == -1) {
+
+			std::cout  << "right:" << tree.at(x.right).value;
+
+		}
+		if (x.right != -1 && x.left != -1) {
+
+			std::cout  << "left:" << tree.at(x.left).value << " | right:" << tree.at(x.right).value;
+
 		}
 		std::cout << "\n";
+		idx++;
 	}
 }
 
@@ -31,7 +34,7 @@ int main(int argc, char** argv) {
 	printf("\n");
 	print(aa);
 	//for (auto x : aa) {
-	//	std::cout << calc_factor(&(x)) << "   " << x.value << "\n\n";
+	//	std::cout << x.value << "\n";
 	//}
 
 	//printf("{}", aa.size());

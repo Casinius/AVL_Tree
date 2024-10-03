@@ -1,22 +1,22 @@
 [
     {
-        "caretX": 49,
-        "caretY": 92,
-        "filename": "D:/RedPanda-CPP/projects/AVL_Tree/avl_tree.h",
-        "focused": true,
-        "isOpen": true,
-        "left": 0,
-        "order": 1,
-        "top": 1587
-    },
-    {
-        "caretX": 32,
-        "caretY": 4,
+        "caretX": 25,
+        "caretY": 10,
         "filename": "D:/RedPanda-CPP/projects/AVL_Tree/main.cpp",
         "focused": false,
         "isOpen": true,
         "left": 0,
         "order": 0,
         "top": 0
+    },
+    {
+        "caretX": 29,
+        "caretY": 120,
+        "filename": "D:/RedPanda-CPP/projects/AVL_Tree/avl_tree.h",
+        "focused": true,
+        "isOpen": true,
+        "left": 0,
+        "order": 1,
+        "top": 2070
     }
 ]

@@ -12,11 +12,10 @@ CXXINCS  =
 CXXFLAGS = $(CXXINCS) "-g3" "-std=c++2b" "-pipe" "-Wall" "-D_DEBUG"
 CFLAGS   = $(INCS) "-std=c17" "-g3" "-pipe" "-Wall" "-D_DEBUG"
 WINDRESFLAGS = 
-RES      = AVL_Tree_private.res
-OBJ      = main.o $(RES)
+OBJ      = main.o
 BIN      = AVL_Tree.exe
-LINKOBJ  = "main.o" "AVL_Tree_private.res"
-CLEANOBJ = "main.o" "AVL_Tree_private.res" "AVL_Tree.exe"
+LINKOBJ  = "main.o"
+CLEANOBJ = "main.o" "AVL_Tree.exe"
 
 .PHONY: all all-before all-after clean clean-custom
 
@@ -31,7 +30,3 @@ AVL_Tree.exe: $(OBJ)
 
 main.o: main.cpp avl_tree.h
 	$(CXX) -c "main.cpp" -o "main.o" $(CXXFLAGS)  -finput-charset=UTF-8 -fexec-charset=gbk
-
-AVL_Tree_private.res: AVL_Tree_private.rc 
-	$(WINDRES) -i "AVL_Tree_private.rc" --input-format=rc -o "AVL_Tree_private.res" -O coff $(WINDRESFLAGS) 
-
