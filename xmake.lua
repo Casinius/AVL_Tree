@@ -1,7 +1,8 @@
 add_rules("mode.debug", "mode.release")
-set_languages("c++20")
---add_cxxflags("-fconcepts")
+set_languages("c++2a")
+add_cxxflags("-fconcepts")
 add_rules("plugin.compile_commands.autoupdate", {outputdir = ".vscode"})
+
 target("avl_tree")
     set_kind("binary")
     add_files("src/*.cpp")
