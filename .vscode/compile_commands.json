@@ -1,0 +1,6 @@
+[
+{
+  "directory": "/home/cyan/Documents/avl_tree/avl_tree",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++20", "-Ibuild/.gens/avl_tree/linux/x86_64/release/platform/windows/idl", "-fstack-protector", "-DNDEBUG", "-o", "build/.objs/avl_tree/linux/x86_64/release/src/main.cpp.o", "src/main.cpp"],
+  "file": "src/main.cpp"
+}]
